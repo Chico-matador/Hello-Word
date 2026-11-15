@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hello World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage" data-screen="menu">
+  <canvas id="stars" width="344" height="192" aria-hidden="true"></canvas>
+
+  <!-- MAIN MENU -->
+  <section class="screen" id="s-menu">
+    <div class="menu-fx" aria-hidden="true"><i></i><i></i><i></i></div>
+    <h1 class="logo">Hello<br>World</h1>
+    <p class="tagline">A pixel space mission</p>
+    <nav class="menu-col">
+      <button class="btn big-menu" data-act="new-game">▶ New Game</button>
+      <button class="btn" id="btn-continue" data-act="continue" disabled>Continue</button>
+      <button class="btn creative" data-act="creative" title="Infinite money: build any rocket">Creative Mode ∞</button>
+      <div class="menu-chips">
+        <button class="btn small" id="btn-players" data-act="players" title="Local co-op: a second player on the same keyboard">Players: 1</button>
+        <button class="btn small" id="btn-music" data-act="music">Music: On ♪</button>
+        <button class="btn small" data-modal="options">Options</button>
+        <button class="btn small" data-modal="scores">Scores</button>
+        <button class="btn small warn" data-modal="exit">Exit</button>
+      </div>
+    </nav>
+    <p class="menu-foot">NASA Space Apps Challenge · made with Phaser</p>
+  </section>
+
+  <!-- LOADING -->
+  <section class="screen" id="s-loading">
+    <img class="floater" src="assets/astro_green.png" alt="">
+    <div class="panel fact"><p><b>Fun fact:</b> <span id="fact-text"></span></p></div>
+    <div class="loadbar" role="progressbar" aria-label="Loading"><i id="loadfill"></i></div>
+    <button class="btn small corner-br" data-go="menu">Back</button>
+  </section>
+
+  <!-- TEAM SELECTION -->
+  <section class="screen" id="s-team">
+    <div class="sun" aria-hidden="true"></div>
+    <h2 class="banner">Team Selection</h2>
+    <div class="slots" id="slots" aria-label="Chosen team"></div>
+    <div class="lineup" id="lineup" role="listbox" aria-label="Crew"></div>
+    <div class="panel crew-info" id="crew-info"></div>
+    <button class="btn small" id="team-back" data-go="build">Back</button>
+    <button class="btn" id="team-toggle" data-act="team-toggle">Add</button>
+    <p class="team-cost" id="team-cost"></p>
+    <button class="btn big" id="team-confirm" data-act="team-confirm">Launch</button>
+  </section>
+
+  <!-- ESCOLHA DO FOGUETE -->
+  <section class="screen" id="s-rockets">
+    <h2 class="banner">Choose a Rocket</h2>
+    <div class="rcards" id="rocket-cards"></div>
+    <p class="rockets-budget" id="rockets-budget"></p>
+    <button class="btn small corner-bl" data-go="menu">Menu</button>
+  </section>
+
+  <!-- BUILD: manual de montagem estilo LEGO -->
+  <section class="screen" id="s-build">
+    <header class="build-top">
+      <h2 class="banner left">Rocket Assembly · <span id="build-model"></span></h2>
+      <button class="btn small" data-act="pause" aria-label="Pause">II Pause</button>
+    </header>
+    <aside class="panel tray">
+      <h3>Parts bin</h3>
+      <div class="tray-grid" id="tray"></div>
+    </aside>
+    <div class="bay" id="bay" aria-label="Launch pad">
+      <div class="pad" aria-hidden="true"></div>
+      <div class="rocket" id="rocket"></div>
+    </div>
+    <aside class="manual" id="manual" aria-live="polite"></aside>
+    <footer class="build-bottom">
+      <button class="btn small" data-act="undo" id="btn-undo">Undo step</button>
+      <button class="btn small" data-act="restart-build">Start over</button>
+      <button class="btn small" data-act="reuse" id="btn-reuse" hidden>Reuse last design</button>
+      <button class="btn small" data-go="rockets">Change rocket</button>
+      <p class="bay-msg" id="bay-msg" role="status"></p>
+      <button class="btn big" id="btn-team" data-go="team" disabled>Choose team</button>
+    </footer>
+  </section>
+
+  <!-- LAUNCH -->
+  <section class="screen" id="s-launch">
+    <div class="count" id="count" aria-live="assertive"></div>
+    <div class="liftoff" id="liftoff"><div class="rocket" id="rocket-launch"></div></div>
+    <div class="launch-crew" id="launch-crew"></div>
+    <div class="panel enroute" id="ascent-fail" hidden>
+      <h3>Launch failed</h3>
+      <p id="ascent-why"></p>
+      <p class="dim">Nothing lost: the rocket is back on the pad.</p>
+      <div class="row">
+        <button class="btn" data-act="ascent-retry">Try again</button>
+        <button class="btn" data-act="fly-auto">Autopilot</button>
+      </div>
+    </div>
+    <div class="orbit-banner" id="orbit-banner" hidden>
+      <img src="assets/orbit_banner.png" alt="" onerror="this.remove()">
+      <h2>We're in orbit!</h2>
+    </div>
+    <div class="panel enroute" id="enroute" hidden>
+      <h3>We're in space!</h3>
+      <p>Orbit reached. Walk to the cockpit to pick a destination.</p>
+      <button class="btn" data-go="ship">Go to the cabin</button>
+    </div>
+  </section>
+
+  <!-- MAPA DOS PLANETAS -->
+  <section class="screen" id="s-map">
+    <h2 class="banner">Star Map</h2>
+    <div class="planets" id="planets" role="listbox" aria-label="Destination"></div>
+    <aside class="panel map-info" id="map-info"></aside>
+    <p class="map-dv" id="map-dv"></p>
+    <button class="btn small corner-bl" data-go="menu">Menu</button>
+    <button class="btn small warn map-abort" data-act="abort">Return to Earth</button>
+    <button class="btn small map-ship" data-go="ship">Ship interior</button>
+  </section>
+
+  <!-- QUEM SAI DA NAVE -->
+  <section class="screen" id="s-eva">
+    <h2 class="banner" id="eva-title">Moon Landing</h2>
+    <p class="eva-ask">The lander is down. Who goes outside?</p>
+    <div class="lineup eva-lineup" id="eva-lineup" role="listbox" aria-label="Crew member for the moonwalk"></div>
+    <div class="panel crew-info" id="eva-info"></div>
+    <p class="panel eva-quest" id="eva-quest"></p>
+    <button class="btn big" id="eva-go" data-go="moon">Go outside</button>
+  </section>
+
+  <!-- LUA (estilo sandbox 2D) -->
+  <section class="screen" id="s-moon">
+    <div id="moon-view"></div>
+    <div class="panel moon-hud">
+      <h3 id="moon-title">Moon · EVA</h3>
+      <p id="moon-quest" class="moon-quest"></p>
+      <p id="moon-stats"></p>
+      <div class="o2"><img src="assets/ic_heart.png" alt="Health"><div class="o2bar hp"><i id="hpfill"></i></div><b id="hpnum"></b></div>
+      <div class="o2"><img src="assets/ic_o2.png" alt="Oxygen"><div class="o2bar"><i id="o2fill"></i></div><b id="o2num"></b></div>
+      <div class="o2"><img src="assets/ic_bolt.png" alt="Stamina"><div class="o2bar st"><i id="stfill"></i></div><b id="stnum"></b></div>
+    </div>
+    <button class="btn small moon-pause" data-act="pause" aria-label="Pause">II Pause</button>
+    <p class="moon-msg" id="moon-msg" role="status" hidden></p>
+    <p class="moon-help">A/D walk · Space jump · Shift run · E collect · F at lander: get in<br>Left click: mine · Right click: place soil<br><span class="p2-help">P2: ← → walk · ↑ jump · ↓ pick up · Enter dig<br></span><span class="ship-help">Inside: A/D walk · E use stations and switch crew</span></p>
+  </section>
+
+  <!-- CRITICAL INCIDENT -->
+  <section class="screen" id="s-incident">
+    <div class="alert"><img class="tri" src="assets/ic_warn.png" alt="">Critical Incident Detected</div>
+    <img class="station" src="assets/incident_station.jpg" alt="">
+    <img class="big-astro left" src="assets/astro_green.png" alt="">
+    <img class="big-astro right" src="assets/astro_green.png" alt="">
+    <div class="panel dialog">
+      <div class="portrait"><img src="assets/astro_orange.png" alt=""></div>
+      <div class="lines">
+        <p><b class="c-cyan">Engineer Mia:</b> A power overload in Sector 4 is cascading! Systems are failing. We have very little time!</p>
+        <p><b class="c-orange">Commander Jax:</b> Mia is right. This is serious. I need a decision. Choose wisely, the lives of your crew and the future of the station depend on it.</p>
+      </div>
+      <div class="choices">
+        <button class="btn warn tall" data-go="failed">Evacuate Crew<small>(Risk Ship)</small></button>
+        <button class="btn tall" data-go="failed">Manual Repair<small>(Risk Crew)</small></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION FAILED -->
+  <section class="screen" id="s-failed">
+    <h2 class="banner wide red">Mission Failed</h2>
+    <div class="panel cause">
+      <img src="assets/ic_warn.png" alt="">
+      <p id="fail-cause"></p>
+    </div>
+    <div class="panel wreck">
+      <img src="assets/ev_landing.jpg" alt="">
+      <div class="panel tip"><img src="assets/ic_bulb.png" alt=""><p id="fail-tip"></p></div>
+    </div>
+    <button class="btn big corner-bl" data-go="build">Retry</button>
+    <button class="btn big corner-br" data-go="menu">Menu</button>
+  </section>
+
+  <!-- MODALS -->
+  <div class="modal-wrap" id="modal" hidden>
+    <div class="panel modal" id="modal-box" role="dialog" aria-modal="true"></div>
+  </div>
+</div>
+<script src="phaser.js"></script>
+<script src="moon.js"></script>
+<script src="minigames.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
