@@ -3,8 +3,8 @@
 > Build a rocket part by part, pick your crew, fly it to orbit yourself and explore the Moon and Mars.
 > A pixel-art space game about real spaceflight and planetary science, made for the **NASA Space Apps Challenge**.
 
-🎬 **Trailer (30 s):** _add your public link here_
-🎮 **Play online:** _add your public link here_
+🎬 **Trailer (30 s):** _add your public https://www.youtube.com/watch?v=hLEg2knrymQ
+🎮 **Play online:** _add your public https://hello-word-two-pi.vercel.app
 
 ---
 
